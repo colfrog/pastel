@@ -3,24 +3,24 @@
 
 #include "board.h"
 
-#define SQUARE_SIZE 25
-
 class BoardView : public QWidget {
 	Q_OBJECT
 
 public:
 	BoardView(QWidget *parent = nullptr);
 
+	void set_square_size();
+
 public slots:
 	void step();
 
 protected:
 	void paintEvent(QPaintEvent *event) override;
+	void resizeEvent(QResizeEvent *event) override;
 
 private:
 	Board m_board;
 	QTimer *m_timer;
 
-	int m_width = SQUARE_SIZE*BOARD_WIDTH;
-	int m_height = SQUARE_SIZE*BOARD_HEIGHT;
+	int m_square_size;
 };

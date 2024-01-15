@@ -1,13 +1,21 @@
+#include <algorithm>
+
 #include <QPainter>
 
 #include "BoardView.h"
 
 BoardView::BoardView(QWidget *parent) : QWidget(parent) {
+	set_square_size();
 	m_timer = new QTimer;
 	connect(m_timer, &QTimer::timeout,
 		this, &BoardView::step);
-	resize(m_width, m_height);
 	m_timer->start(500);
+}
+
+void BoardView::set_square_size() {
+	m_square_size = std::min((int) (width() / BOARD_WIDTH),
+				 (int) (height() / BOARD_HEIGHT));
+	update();
 }
 
 void BoardView::step() {
@@ -24,8 +32,8 @@ void BoardView::paintEvent(QPaintEvent *event) {
 				Piece::get_type_color(m_board.at(i, j))
 			);
 			painter.setPen("#aaa");
-			painter.drawRect(SQUARE_SIZE*i, SQUARE_SIZE*j,
-					 SQUARE_SIZE, SQUARE_SIZE);
+			painter.drawRect(m_square_size*i, m_square_size*j,
+					 m_square_size, m_square_size);
 		}
 	}
 
@@ -33,7 +41,12 @@ void BoardView::paintEvent(QPaintEvent *event) {
 	for (const QPoint &point : piece.get_square_positions()) {
 		painter.setBrush(piece.get_color());
 		painter.setPen("#aaa");
-		painter.drawRect(SQUARE_SIZE*point.x(), SQUARE_SIZE*point.y(),
-				 SQUARE_SIZE, SQUARE_SIZE);
+		painter.drawRect(m_square_size*point.x(),
+				 m_square_size*point.y(),
+				 m_square_size, m_square_size);
 	}
+}
+
+void BoardView::resizeEvent(QResizeEvent *event) {
+	set_square_size();
 }
