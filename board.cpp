@@ -120,7 +120,6 @@ void Board::move_current_piece_right() {
 void Board::move_current_piece_down() {
 	if (current_piece_on_pile()) {
 		commit_current_piece_to_pile();
-		new_piece();
 	} else {
 		m_current_piece.slide(QPoint(0, 1));
 	}
@@ -133,6 +132,7 @@ void Board::commit_current_piece_to_pile() {
 	for (const QPoint &p : m_current_piece.get_square_positions())
 		m_table[p.x()][p.y()] = m_current_piece.get_type();
 
+	new_piece();
 	clear_full_lines();
 }
 
@@ -153,6 +153,7 @@ void Board::clear_full_lines() {
 
 		if (count == BOARD_WIDTH) {
 			move_down_above(j);
+			j++;
 		}
 	}
 }
