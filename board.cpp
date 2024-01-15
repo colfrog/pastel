@@ -45,7 +45,7 @@ Board::Bounds Board::current_piece_in_bounds() const {
 			return Bounds::RIGHT;
 		if (p.y() < 0)
 			return Bounds::UP;
-		if (p.y() > 0 || current_piece_overlaps_with_pile())
+		if (p.y() > BOARD_HEIGHT || current_piece_overlaps_with_pile())
 			return Bounds::DOWN;
 	}
 
@@ -105,7 +105,7 @@ void Board::move_current_piece_left() {
 void Board::move_current_piece_right() {
 	bool at_edge = false;
 	for (const QPoint &p : m_current_piece.get_square_positions()) {
-		if (p.x() == 0)
+		if (p.x() == BOARD_WIDTH - 1)
 			at_edge = true;
 	}
 
