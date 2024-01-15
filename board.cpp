@@ -96,6 +96,8 @@ void Board::move_current_piece_left() {
 	for (const QPoint &p : m_current_piece.get_square_positions()) {
 		if (p.x() == 0)
 			at_edge = true;
+		if (p.x() >= 1 && m_table[p.x() - 1][p.y()])
+			at_edge = true;
 	}
 
 	if (!at_edge)
@@ -106,6 +108,8 @@ void Board::move_current_piece_right() {
 	bool at_edge = false;
 	for (const QPoint &p : m_current_piece.get_square_positions()) {
 		if (p.x() == BOARD_WIDTH - 1)
+			at_edge = true;
+		if (p.x() <= BOARD_WIDTH - 2 && m_table[p.x() + 1][p.y()])
 			at_edge = true;
 	}
 
