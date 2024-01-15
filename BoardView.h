@@ -1,9 +1,9 @@
 #include <QWidget>
 #include <QTimer>
 
-#include "board.cpp"
+#include "board.h"
 
-#define SQUARE_SIZE 20
+#define SQUARE_SIZE 25
 
 class BoardView : public QWidget {
 	Q_OBJECT
@@ -21,6 +21,6 @@ private:
 	Board m_board;
 	QTimer *m_timer;
 
-	int m_width = SQUARE_SIZE*(BOARD_WIDTH + 1);
-	int m_height = SQUARE_SIZE*(BOARD_HEIGHT + 1);
+	int m_width = SQUARE_SIZE*BOARD_WIDTH;
+	int m_height = SQUARE_SIZE*BOARD_HEIGHT;
 };

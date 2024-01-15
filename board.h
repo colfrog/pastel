@@ -1,5 +1,3 @@
-#pragma once
-
 #include "piece.h"
 
 #define BOARD_HEIGHT 20
@@ -11,6 +9,7 @@ public:
 
 	const Piece &get_current_piece();
 	const Piece &get_next_piece();
+	quint8 at(int x, int y) const;
 
 	enum class Bounds {
 		NONE, UP, RIGHT, DOWN, LEFT

@@ -1,7 +1,5 @@
 #include "piece.h"
 
-#include <iostream>
-
 const std::map<quint8, QList<QPoint>> Piece::starting_positions = {
 	// Line
 	{1, {QPoint(0, 0), QPoint(1, 0), QPoint(2, 0), QPoint(3, 0)}},
@@ -26,8 +24,8 @@ const QColor Piece::colors[8] = {
 	QColor("#AC87C5"),
 	QColor("#FFB996"),
 	QColor("#A1EEBD"),
-	QColor("FFCF81"),
-	QColor("80BCBD")
+	QColor("#FFCF81"),
+	QColor("#80BCBD")
 };
 
 std::random_device Piece::random_device;

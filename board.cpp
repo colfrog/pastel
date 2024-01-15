@@ -13,7 +13,7 @@ void Board::init_pieces() {
 
 void Board::init_table() {
 	for (int i = 0; i < BOARD_WIDTH; i++)
-		for (int j = 0; j < BOARD_WIDTH; j++)
+		for (int j = 0; j < BOARD_HEIGHT; j++)
 			m_table[i][j] = 0;
 }
 
@@ -23,6 +23,10 @@ const Piece &Board::get_current_piece() {
 
 const Piece &Board::get_next_piece() {
 	return m_next_piece;
+}
+
+quint8 Board::at(int x, int y) const {
+	return m_table[x][y];
 }
 
 const QList<QPoint> Board::edge_adjustment = {
@@ -68,8 +72,11 @@ bool Board::current_piece_on_pile() const {
 	for (const QPoint &p : m_current_piece.get_square_positions()) {
 		for (int i = 0; i < BOARD_WIDTH; i++) {
 			for (int j = 0; j < BOARD_HEIGHT; j++) {
-				if (p.x() == i && p.y() - j == -1)
+				if (p.y() == BOARD_HEIGHT - 1 ||
+				    (m_table[i][j] != 0 &&
+				     p.x() == i && p.y() - j == -1)) {
 					return true;
+				}
 			}
 		}
 	}
