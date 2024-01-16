@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <math>
 
 #include <QKeyEvent>
 
@@ -29,7 +30,7 @@ void BoardView::step() {
 		m_timer->setInterval(500);
 	} else {
 		m_board.move_current_piece_down();
-		m_time = 500/m_board.level();
+		m_time = 500 - sqrt(1600*(m_board.level() - 1));
 		m_timer->setInterval(m_time);
 	}
 	update();
