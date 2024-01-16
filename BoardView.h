@@ -27,6 +27,8 @@ private:
 	void draw_board(QPainter &painter);
 	void draw_piece(QPainter &painter, const Piece &piece);
 	void draw_next_piece(QPainter &painter);
+	void draw_info(QPainter &painter);
+	void draw_game_over(QPainter &painter);
 
 	Board m_board;
 	QTimer *m_timer;

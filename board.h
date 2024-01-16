@@ -10,6 +10,9 @@ public:
 	const Piece &get_current_piece();
 	const Piece &get_next_piece();
 	quint8 at(int x, int y) const;
+	bool game_over() const;
+	quint64 score() const;
+	quint64 level() const;
 
 	enum class Bounds {
 		NONE, UP, RIGHT, DOWN, LEFT
@@ -29,12 +32,14 @@ public:
 	void move_down_above(int line);
 
 private:
-	void init_pieces();
 	void init_table();
 
 	quint8 m_table[BOARD_WIDTH][BOARD_HEIGHT];
 	Piece m_current_piece;
 	Piece m_next_piece;
+	bool m_game_over = false;
+	quint64 m_score = 0;
+	quint64 m_lines_cleared = 0;
 
 	static const QList<QPoint> edge_adjustment;
 };

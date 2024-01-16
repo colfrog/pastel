@@ -19,7 +19,15 @@ void BoardView::set_square_size() {
 }
 
 void BoardView::step() {
+	if (m_board.game_over()) {
+		m_timer->stop();
+		update();
+		return;
+	}
+
 	m_board.move_current_piece_down();
+	m_time = 500/m_board.level();
+	m_timer->setInterval(m_time);
 	update();
 }
 
@@ -30,9 +38,16 @@ void BoardView::paintEvent(QPaintEvent *event) {
 	painter.drawRect(0, 0, width(), height());
 	painter.translate((width() - m_square_size*BV_WIDTH)/2, 0);
 	draw_board(painter);
-	draw_piece(painter, m_board.get_current_piece());
+	if (!m_board.game_over())
+		draw_piece(painter, m_board.get_current_piece());
 	painter.translate(BOARD_WIDTH*m_square_size, 0);
 	draw_next_piece(painter);
+	painter.translate(0, 4*m_square_size);
+	draw_info(painter);
+
+	painter.resetTransform();
+	if (m_board.game_over())
+		draw_game_over(painter);
 }
 
 void BoardView::resizeEvent(QResizeEvent *event) {
@@ -40,6 +55,9 @@ void BoardView::resizeEvent(QResizeEvent *event) {
 }
 
 void BoardView::keyPressEvent(QKeyEvent *event) {
+	if (m_board.game_over())
+		return;
+
 	switch (event->key()) {
 	case Qt::Key_Escape:
 		if (m_timer->isActive())
@@ -102,6 +120,7 @@ void BoardView::draw_piece(QPainter &painter, const Piece &piece) {
 
 void BoardView::draw_next_piece(QPainter &painter) {
 	painter.setBrush(QColor("#000"));
+	painter.setPen("#aaa");
 	painter.drawRect(0, 0, SIDEBAR_WIDTH*m_square_size,
 			 4*m_square_size);
 
@@ -109,9 +128,39 @@ void BoardView::draw_next_piece(QPainter &painter) {
 	QFont font = painter.font();
 	font.setPixelSize(m_square_size/2);
 	painter.setFont(font);
-	painter.drawText(m_square_size/5, 0, 6*m_square_size, m_square_size,
+	painter.drawText(0, 0, 6*m_square_size, m_square_size,
 			 Qt::AlignHCenter | Qt::AlignVCenter, "Next piece");
 
         painter.translate(m_square_size, m_square_size);
 	draw_piece(painter, m_board.get_next_piece());
+	painter.translate(-m_square_size, -m_square_size);
+}
+
+void BoardView::draw_info(QPainter &painter) {
+	painter.setBrush(QColor("#000"));
+	painter.drawRect(0, 0, SIDEBAR_WIDTH*m_square_size, 16*m_square_size);
+
+	painter.setPen("#dcdccc");
+	QFont font = painter.font();
+	font.setPixelSize(m_square_size);
+	painter.setFont(font);
+	QString score = QString("Score: ") + QString::number(m_board.score());
+	QString level = QString("Level: ") + QString::number(m_board.level());
+	painter.drawText(0, m_square_size,
+			 6*m_square_size, m_square_size,
+			 Qt::AlignHCenter | Qt::AlignVCenter, score);
+	painter.drawText(0, 2*m_square_size,
+			 6*m_square_size, m_square_size,
+			 Qt::AlignHCenter | Qt::AlignVCenter, level);
+}
+
+void BoardView::draw_game_over(QPainter &painter) {
+	QFont font = painter.font();
+	font.setPixelSize(2*m_square_size);
+	painter.setFont(font);
+	painter.setPen("#f00");
+	painter.drawText(0, 0, width(), height(),
+			 Qt::AlignHCenter | Qt::AlignVCenter,
+			 "GAME OVER");
+	painter.translate(0, -m_square_size*(BOARD_HEIGHT/2 - 1));
 }

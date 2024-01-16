@@ -1,14 +1,10 @@
+#include <algorithm>
+
 #include "board.h"
 
 Board::Board() {
-	init_pieces();
-	init_table();
-}
-
-void Board::init_pieces() {
-	m_current_piece = Piece();
 	m_current_piece.center_horizontally();
-	m_next_piece = Piece();
+	init_table();
 }
 
 void Board::init_table() {
@@ -27,6 +23,18 @@ const Piece &Board::get_next_piece() {
 
 quint8 Board::at(int x, int y) const {
 	return m_table[x][y];
+}
+
+bool Board::game_over() const {
+	return m_game_over;
+}
+
+quint64 Board::score() const {
+	return m_score;
+}
+
+quint64 Board::level() const {
+	return std::min(((int) m_lines_cleared/10) + 1, 99);
 }
 
 const QList<QPoint> Board::edge_adjustment = {
@@ -132,6 +140,7 @@ void Board::commit_current_piece_to_pile() {
 	for (const QPoint &p : m_current_piece.get_square_positions())
 		m_table[p.x()][p.y()] = m_current_piece.get_type();
 
+	m_score += 10;
 	new_piece();
 	clear_full_lines();
 }
@@ -140,9 +149,13 @@ void Board::new_piece() {
 	m_current_piece = m_next_piece;
 	m_current_piece.center_horizontally();
 	m_next_piece = Piece();
+
+	if (current_piece_overlaps_with_pile())
+		m_game_over = true;
 }
 
 void Board::clear_full_lines() {
+	int lines_cleared = 0;
 	for (int j = BOARD_HEIGHT - 1; j >= 0; j--) {
 		int count = 0;
 
@@ -154,8 +167,12 @@ void Board::clear_full_lines() {
 		if (count == BOARD_WIDTH) {
 			move_down_above(j);
 			j++;
+			lines_cleared++;
 		}
 	}
+
+	m_score += lines_cleared*lines_cleared*100;
+	m_lines_cleared += lines_cleared;
 }
 
 void Board::move_down_above(int line) {
