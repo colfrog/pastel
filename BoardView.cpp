@@ -1,5 +1,5 @@
 #include <algorithm>
-#include <math>
+#include <cmath>
 
 #include <QKeyEvent>
 
@@ -26,13 +26,15 @@ void BoardView::step() {
 		return;
 	}
 
+	m_board.move_current_piece_down();
+
 	if (m_board.current_piece_on_pile()) {
 		m_timer->setInterval(500);
 	} else {
-		m_board.move_current_piece_down();
 		m_time = 500 - sqrt(1600*(m_board.level() - 1));
 		m_timer->setInterval(m_time);
 	}
+
 	update();
 }
 
