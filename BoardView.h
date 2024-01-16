@@ -4,6 +4,9 @@
 
 #include "board.h"
 
+#define SIDEBAR_WIDTH 6
+#define BV_WIDTH (BOARD_WIDTH + SIDEBAR_WIDTH)
+
 class BoardView : public QWidget {
 	Q_OBJECT
 

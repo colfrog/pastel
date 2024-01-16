@@ -13,7 +13,7 @@ BoardView::BoardView(QWidget *parent) : QWidget(parent) {
 }
 
 void BoardView::set_square_size() {
-	m_square_size = std::min((int) (width() / BOARD_WIDTH),
+	m_square_size = std::min((int) (width() / BV_WIDTH),
 				 (int) (height() / BOARD_HEIGHT));
 	update();
 }
@@ -25,8 +25,13 @@ void BoardView::step() {
 
 void BoardView::paintEvent(QPaintEvent *event) {
 	QPainter painter(this);
+	painter.setBrush(QColor("#A0F"));
+	painter.setPen("#A0F");
+	painter.drawRect(0, 0, width(), height());
+	painter.translate((width() - m_square_size*BV_WIDTH)/2, 0);
 	draw_board(painter);
 	draw_piece(painter, m_board.get_current_piece());
+	painter.translate(BOARD_WIDTH*m_square_size, 0);
 	draw_next_piece(painter);
 }
 
@@ -96,9 +101,9 @@ void BoardView::draw_piece(QPainter &painter, const Piece &piece) {
 }
 
 void BoardView::draw_next_piece(QPainter &painter) {
-	painter.translate(BOARD_WIDTH*m_square_size, 0);
 	painter.setBrush(QColor("#000"));
-	painter.drawRect(0, 0, 6*m_square_size, 4*m_square_size);
+	painter.drawRect(0, 0, SIDEBAR_WIDTH*m_square_size,
+			 4*m_square_size);
 
 	painter.setPen("#dcdccc");
 	QFont font = painter.font();
