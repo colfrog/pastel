@@ -25,9 +25,13 @@ void BoardView::step() {
 		return;
 	}
 
-	m_board.move_current_piece_down();
-	m_time = 500/m_board.level();
-	m_timer->setInterval(m_time);
+	if (m_board.current_piece_on_pile()) {
+		m_timer->setInterval(500);
+	} else {
+		m_board.move_current_piece_down();
+		m_time = 500/m_board.level();
+		m_timer->setInterval(m_time);
+	}
 	update();
 }
 
