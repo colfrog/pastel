@@ -72,31 +72,38 @@ void BoardView::keyPressEvent(QKeyEvent *event) {
 		else
 			m_timer->start();
 		break;
-	case Qt::Key_Up:
-	case Qt::Key_W:
-	case Qt::Key_J:
-		m_board.rotate_current_piece();
-		break;
-	case Qt::Key_Left:
-	case Qt::Key_A:
-	case Qt::Key_H:
-		m_board.move_current_piece_left();
-		break;
-	case Qt::Key_Right:
-	case Qt::Key_D:
-	case Qt::Key_L:
-		m_board.move_current_piece_right();
-		break;
-	case Qt::Key_Down:
-	case Qt::Key_S:
-	case Qt::Key_K:
-		m_board.move_current_piece_down();
-		break;
-	case Qt::Key_Space:
-		m_board.commit_current_piece_to_pile();
-		break;
 	default:
 		break;
+	}
+
+	if (m_timer->isActive()) {
+		switch (event->key()) {
+		case Qt::Key_Up:
+		case Qt::Key_W:
+		case Qt::Key_J:
+			m_board.rotate_current_piece();
+			break;
+		case Qt::Key_Left:
+		case Qt::Key_A:
+		case Qt::Key_H:
+			m_board.move_current_piece_left();
+			break;
+		case Qt::Key_Right:
+		case Qt::Key_D:
+		case Qt::Key_L:
+			m_board.move_current_piece_right();
+			break;
+		case Qt::Key_Down:
+		case Qt::Key_S:
+		case Qt::Key_K:
+			m_board.move_current_piece_down();
+			break;
+		case Qt::Key_Space:
+			m_board.commit_current_piece_to_pile();
+			break;
+		default:
+			break;
+		}
 	}
 
 	update();
